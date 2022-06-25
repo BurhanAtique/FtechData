@@ -25,7 +25,10 @@ mapUsers = (data) => {
         cel3 = row.insertCell(2);
         cel1.innerText = dat.id;
         cel2.innerText = dat.title;
-        cel3.innerText = dat.completed;
+        var r1 = document.createElement('input');
+        r1.type = "radio";
+        dat.completed ? r1.checked = true : r1.checked = false;
+        cel3.appendChild(r1);
     })
 };
 
