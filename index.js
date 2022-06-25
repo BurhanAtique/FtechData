@@ -1,5 +1,8 @@
 const table = document.getElementById('tableId');
+const tableId = document.getElementById('idVal');
 const input = document.getElementById('inp');
+const sub = document.getElementById('sub');
+
 let obj = {};
 fetchData = () => {
     fetch('https://jsonplaceholder.typicode.com/users')
@@ -7,32 +10,22 @@ fetchData = () => {
         .then(data => {
             obj = data; //this not working
             mapData(data);
-            addEvent(data);
-        });
+            // addEvent(data);
+        })
+        .catch(err => console.log("error", err))
 };
 
-fetchRadData = () => {
-    fetch('https://jsonplaceholder.typicode.com/users/1/todos')
-        .then(res => res.json())
-        .then(data => {
-            mapDet(data);
-        })
-}
-
-mapDet = (data) => {
+mapUsers = (data) => {
+    tableId.innerText = "";
     data.map((dat) => {
-        var rowCount = table.rows.length;
-        row = table.insertRow(rowCount);
+        var rowCount = tableId.rows.length;
+        row = tableId.insertRow(rowCount);
         cel1 = row.insertCell(0);
         cel2 = row.insertCell(1);
         cel3 = row.insertCell(2);
         cel1.innerText = dat.id;
         cel2.innerText = dat.title;
-        var radiobox = document.createElement('input');
-        radiobox.type = 'radio';
-        radiobox.id = 'contact';
-        radiobox.value = 'email';
-        cel3.appendChild = radiobox;
+        cel3.innerText = dat.completed;
     })
 };
 
@@ -48,6 +41,7 @@ mapData = (data) => {
         cel3.innerText = dat.email;
     })
 };
+
 
 
 addEvent = (data) => {
@@ -71,3 +65,16 @@ checkUserName = (obj) => {
 
 // fetchRadData();
 fetchData();
+
+search = () => {
+    console.log("here");
+    const idVal = input.value;
+    const url = `https://jsonplaceholder.typicode.com/users/${idVal}/todos`;
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            console.log(JSON.stringify(data))
+            mapUsers(data);
+        })
+    return false;
+}
