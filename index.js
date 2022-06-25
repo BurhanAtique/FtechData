@@ -1,20 +1,43 @@
 const table = document.getElementById('tableId');
-const input=document.getElementById('inp');
-var obj;
-fetchData = async () => {
+const input = document.getElementById('inp');
+let obj = {};
+fetchData = () => {
     fetch('https://jsonplaceholder.typicode.com/users')
         .then(res => res.json())
         .then(data => {
-            // console.log(JSON.stringify(data));
-            obj=data;
+            obj = data; //this not working
             mapData(data);
+            addEvent(data);
         });
+};
+
+fetchRadData = () => {
+    fetch('https://jsonplaceholder.typicode.com/users/1/todos')
+        .then(res => res.json())
+        .then(data => {
+            mapDet(data);
+        })
+}
+
+mapDet = (data) => {
+    data.map((dat) => {
+        var rowCount = table.rows.length;
+        row = table.insertRow(rowCount);
+        cel1 = row.insertCell(0);
+        cel2 = row.insertCell(1);
+        cel3 = row.insertCell(2);
+        cel1.innerText = dat.id;
+        cel2.innerText = dat.title;
+        var radiobox = document.createElement('input');
+        radiobox.type = 'radio';
+        radiobox.id = 'contact';
+        radiobox.value = 'email';
+        cel3.appendChild = radiobox;
+    })
 };
 
 mapData = (data) => {
     data.map((dat) => {
-        // console.log(dat.username);
-        // console.log(table.rows.length);
         var rowCount = table.rows.length;
         row = table.insertRow(rowCount);
         cel1 = row.insertCell(0);
@@ -25,20 +48,26 @@ mapData = (data) => {
         cel3.innerText = dat.email;
     })
 };
-fetchData();
 
-input.addEventListener('keyup',(event)=>{
-    event.preventDefault();
-    var objectData=filetrData(event.target.value);
-    console.log(objectData);
-    mapData(objectData);
-})
 
-filetrData = (key) => {
-    console.log(key);
-    obj.filter((dt)=>{
-        return dt.username.includes(key)
-    })
+addEvent = (data) => {
+    input.addEventListener('change', (event) => {
+        event.preventDefault();
+        // var objectData = filterData(data);
+        var objectData = data.filter(dat => dat.username.includes(input.value));
+        table.innerText = "";
+        mapData(objectData);
+    });
+}
+
+
+filterData = (data) => {
+    return data.filter(dat => dat.username.includes(input.value));
+    // return data.filter(checkUserName);
 };
+checkUserName = (obj) => {
+    return obj.username.includes(inp.value);
+}
 
-matc
+// fetchRadData();
+fetchData();
